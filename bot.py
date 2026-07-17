@@ -85,7 +85,7 @@ def handle_verification(call):
 if __name__ == '__main__':
     import threading
     # Bot ko functional crash se bachane ke liye non-stop polling setup
-bot.infinity_polling(timeout=10, long_polling_timeout=5)
+bot.infinity_polling(timeout=10,long_polling_timeout=5)
 
     # Render ka dynamic port uthane ke liye
     port = int(os.environ.get("PORT", 5000))
