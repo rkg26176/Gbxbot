@@ -1,14 +1,20 @@
 import os
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from flask import Flask
 
-# Bot Token hum Render ki setting se secure tarike se uthayenge
+# Flask server banayein taaki Render ise dynamic web service maane
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Bot is running perfectly!"
+
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 bot = telebot.TeleBot(BOT_TOKEN)
 
 WEB_APP_URL = "https://rkg26176.github.io/Gbxbot/"
 
-# Aapke channels aur unki exact IDs aur links
 CHANNELS = {
     "-1003332858806": {"name": "📢 GBX LOOT", "url": "https://t.me/+6ByfGDRBKgsxMjZl"},
     "-1003630519339": {"name": "📢 GBX EARN", "url": "https://t.me/+OWrCoeF-JutmNjg1"},
@@ -16,7 +22,6 @@ CHANNELS = {
 }
 
 def check_user_joined(user_id):
-    """Teeno channels check karne ka function"""
     for channel_id in CHANNELS:
         try:
             member = bot.get_chat_member(chat_id=int(channel_id), user_id=user_id)
@@ -78,6 +83,11 @@ def handle_verification(call):
         bot.answer_callback_query(call.id, "❌ Please join all 3 channels first!", show_alert=True)
 
 if __name__ == '__main__':
-    print("Bot is starting...")
-    bot.infinity_polling()
-                            
+    import threading
+    # Bot ko alag thread me chalayenge taaki dono server saath kaam karein
+    threading.Thread(target=lambda: bot.infinity_polling(skip_pending=True)).start()
+    
+    # Render ka dynamic port uthane ke liye
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+    
