@@ -1,93 +1,166 @@
-<div style="
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background: rgba(255,165,0,0.15);
-  color: orange;
-  padding: 10px 20px;
-  border: 1px solid orange;
-  border-radius: 14px;
-  font-weight: 600;
-  cursor: pointer;
-">
-  GBX X SWIGGY
-  <span>☠️</span>
-</div>
-  <img src="IMG_20260624_170122_521.jpg" style="
-  width:130px;
-  height:130px;
-  object-fit:cover;
-  border-radius:50%;
-  border:3px solid orange;
-  margin:20px auto;
-  display:block;
-  ">
-</span>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>GBX BOT</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #111;
-      color: white;
-      text-align: center;
-    }
-
-    .box {
-      margin-top: 80px;
-      padding: 20px;
-    }
-
-    h1 {
-      color: #00ff88;
-    }
-
-    .btn {
-      margin-top: 20px;
-      padding: 15px 25px;
-      background: #00ff88;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      cursor: pointer;
-      color: black;
-    }
-
-    .btn:hover {
-      background: #00cc66;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL SWIGGY ARENA</title>
+    <!-- Tailwind CSS for Premium Styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #0d0e12;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .orange-glow {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.25);
+        }
+        .blue-glow {
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.1);
+            border: 1px solid rgba(14, 165, 233, 0.15);
+        }
+    </style>
 </head>
+<body class="p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between select-none">
 
-<body>
+    <div>
+        <!-- TOP HEADER (Dynamic User Data) -->
+        <header class="flex items-center justify-between mb-6 mt-2">
+            <div class="flex items-center gap-3">
+                <!-- User Profile Picture -->
+                <div class="w-12 h-12 rounded-full border-2 border-orange-500 overflow-hidden bg-gray-800 flex items-center justify-center">
+                    <img id="user-dp" src="" alt="DP" class="w-full h-full object-cover hidden">
+                    <i id="dp-fallback" class="fa-solid fa-user text-gray-500 text-xl"></i>
+                </div>
+                <div>
+                    <!-- Dynamic Greeting & Name -->
+                    <h2 class="text-sm font-semibold text-gray-300"><span id="greeting">Hello</span>, <span id="user-name">User</span>! 👋</h2>
+                    <p class="text-xs text-gray-500">Welcome to the Arena</p>
+                </div>
+            </div>
+            <!-- Live Indicator -->
+            <span class="bg-emerald-950/80 text-emerald-400 text-[11px] px-2.5 py-1 rounded-full border border-emerald-500/50 font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
+            </span>
+        </header>
 
-  <div class="box">
-    <h1>✅ GBX BOT WORKING</h1>
+        <!-- LIVE STATS BANNER -->
+        <div class="bg-gray-900/40 border border-gray-800/60 rounded-full px-4 py-2 flex items-center justify-between text-xs mb-6">
+            <span class="text-gray-400">Combos available</span>
+            <span class="text-emerald-400 font-medium">🔥 2,847 <span class="text-gray-400">deals claimed in last hour</span></span>
+        </div>
 
-    <p>👋 Welcome to GBX BOT</p>
+        <!-- MAIN HERO TITLE -->
+        <div class="mb-6">
+            <p class="text-[10px] tracking-widest text-emerald-400 font-bold uppercase mb-1">● MEGA DEALS EXCLUSIVE</p>
+            <h1 class="text-4xl font-extrabold tracking-tight">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
+        </div>
 
-    <p>🔥 Your Loot is Ready!</p>
+        <!-- SECTION DIVIDER -->
+        <div class="flex items-center gap-2 mb-5">
+            <span class="text-[10px] font-bold tracking-wider text-gray-500 uppercase">CHOOSE YOUR ARENA</span>
+            <div class="h-[1px] bg-gray-800 flex-grow"></div>
+        </div>
 
-    <ul style="list-style:none; padding:0;">
-      <li>• ₹50 OFF on ₹99</li>
-      <li>• Pay ONLY ₹24</li>
-      <li>• 70% Discount</li>
-    </ul>
+        <!-- MAIN CARDS CONTAINER -->
+        <main class="space-y-4">
+            
+            <!-- SWIGGY FOOD CARD (Clickable with your custom link) -->
+            <div onclick="openSwiggyLink()" class="bg-[#16120e] orange-glow rounded-3xl p-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-orange-950/50 text-orange-400 text-[10px] px-3 py-1 rounded-full border border-orange-900/60 font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-utensils mr-1"></i> FOOD DELIVERY
+                    </span>
+                    <button class="w-8 h-8 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+                
+                <div class="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4">
+                    <i class="fa-solid fa-hamburger"></i>
+                </div>
 
-    <button class="btn" onclick="openLink()">
-      🚀 START ORDER
-    </button>
-  </div>
+                <h3 class="text-xl font-bold mb-1">Swiggy Food</h3>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">Massive discounts on your favourite restaurants. Claim exclusive deals and enjoy lightning-fast delivery!</p>
+                
+                <div class="flex flex-wrap gap-2 text-[11px]">
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🔥 60% OFF</span>
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">⚡ Free Delivery</span>
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🎉 Mega Combos</span>
+                </div>
+            </div>
 
-  <script>
-    function openLink() {
-      window.open("https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797", "_blank");
-    }
-  </script>
+            <!-- INSTAMART CARD (Abhi Ke Liye Non-Clickable) -->
+            <div class="bg-[#0b131a] blue-glow rounded-3xl p-5 relative overflow-hidden opacity-75">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-sky-950/50 text-sky-400 text-[10px] px-3 py-1 rounded-full border border-sky-900/60 font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-shopping-cart mr-1"></i> INSTAMART
+                    </span>
+                    <button class="w-8 h-8 rounded-full bg-sky-500/10 text-sky-500/50 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-lock text-xs"></i>
+                    </button>
+                </div>
+                
+                <div class="w-14 h-14 bg-sky-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4 opacity-80">
+                    <i class="fa-solid fa-shopping-bag"></i>
+                </div>
 
+                <h3 class="text-xl font-bold mb-1 text-gray-300">Swiggy Instamart</h3>
+                <p class="text-xs text-gray-500 leading-relaxed mb-4">Groceries, snacks & essentials delivered in minutes. Stock up with instant delivery!</p>
+                
+                <div class="flex flex-wrap gap-2 text-[11px] opacity-60">
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md">🛒 10-Min Delivery</span>
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md">💰 Best Prices</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- FOOTER CREDITS -->
+    <footer class="text-center text-[10px] text-gray-600 tracking-wider uppercase mt-8 mb-2">
+        DEVELOPED BY <span class="text-emerald-400">INDIANPMO</span> & <span class="text-emerald-400">PROOFYGAMERZ</span>
+    </footer>
+
+    <script>
+        // Initialize Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Screen ko full size karne ke liye
+
+        // 1. Dynamic Greeting Based on Time
+        const hrs = new Date().getHours();
+        let greet = "Hello";
+        if (hrs < 12) greet = "Good morning";
+        else if (hrs < 17) greet = "Good afternoon";
+        else greet = "Good evening";
+        document.getElementById('greeting').innerText = greet;
+
+        // 2. Automatically Fetch Telegram User DP and Name
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            
+            // Name placeholder badlein
+            document.getElementById('user-name').innerText = user.first_name;
+            
+            // Photo URL user ki fetch karke set karein
+            if (user.photo_url) {
+                const dpImg = document.getElementById('user-dp');
+                dpImg.src = user.photo_url;
+                dpImg.classList.remove('hidden');
+                document.getElementById('dp-fallback').classList.add('hidden');
+            }
+        }
+
+        // 3. Click Function for Swiggy Food Card
+        function openSwiggyLink() {
+            // Aapki di hui exact custom link
+            tg.openLink("https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797");
+        }
+    </script>
 </body>
 </html>
