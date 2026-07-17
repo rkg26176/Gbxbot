@@ -84,9 +84,9 @@ def handle_verification(call):
 
 if __name__ == '__main__':
     import threading
-    # Bot ko alag thread me chalayenge taaki dono server saath kaam karein
-    threading.Thread(target=lambda: bot.infinity_polling(skip_pending=True)).start()
-    
+    # Bot ko functional crash se bachane ke liye non-stop polling setup
+bot.infinity_polling(timeout=10, long_polling_timeout=5)
+
     # Render ka dynamic port uthane ke liye
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
