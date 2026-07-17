@@ -153,13 +153,15 @@
             }
         }
 
-        // 3. Custom Redirect Links
+                // 3. Custom Redirect Links (Bot ke andar hi open karne ke liye)
         function openSwiggyLink() {
-            tg.openLink("https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797");
+            // tg.openLink hataya, window.location.href lagaya taaki frame ke andar hi rahe
+            window.location.href = "https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797";
         }
 
         function openInstamartLink() {
-            tg.openLink("https://www.swiggy.com/instamart/jhs-landing?custom_back=true&layoutId=33909&customerPage=STORES_MxN_95&x-channel=jiohotstar&session_bypass=1784282693696");
+            // Yahan bhi wahi change
+            window.location.href = "https://www.swiggy.com/instamart/jhs-landing?custom_back=true&layoutId=33909&customerPage=STORES_MxN_95&x-channel=jiohotstar&session_bypass=1784282693696";
         }
     </script>
 </body>
