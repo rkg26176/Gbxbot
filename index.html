@@ -22,8 +22,8 @@
             border: 1px solid rgba(249, 115, 22, 0.25);
         }
         .blue-glow {
-            box-shadow: 0 0 25px rgba(14, 165, 233, 0.1);
-            border: 1px solid rgba(14, 165, 233, 0.15);
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.25);
         }
     </style>
 </head>
@@ -35,7 +35,7 @@
             <div class="flex items-center gap-3">
                 <!-- User Profile Picture -->
                 <div class="w-12 h-12 rounded-full border-2 border-orange-500 overflow-hidden bg-gray-800 flex items-center justify-center">
-                    <img id="user-dp" src="" alt="DP" class="w-full h-full object-cover hidden">
+                    <img id="user-dp" src="https://via.placeholder.com/150" alt="DP" class="w-full h-full object-cover hidden">
                     <i id="dp-fallback" class="fa-solid fa-user text-gray-500 text-xl"></i>
                 </div>
                 <div>
@@ -70,8 +70,7 @@
 
         <!-- MAIN CARDS CONTAINER -->
         <main class="space-y-4">
-            
-            <!-- SWIGGY FOOD CARD (Clickable with your custom link) -->
+            <!-- SWIGGY FOOD CARD -->
             <div onclick="openSwiggyLink()" class="bg-[#16120e] orange-glow rounded-3xl p-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
                 <div class="flex justify-between items-start mb-4">
                     <span class="bg-orange-950/50 text-orange-400 text-[10px] px-3 py-1 rounded-full border border-orange-900/60 font-bold uppercase tracking-wider">
@@ -96,43 +95,44 @@
                 </div>
             </div>
 
-            <!-- INSTAMART CARD (Abhi Ke Liye Non-Clickable) -->
-            <div class="bg-[#0b131a] blue-glow rounded-3xl p-5 relative overflow-hidden opacity-75">
+            <!-- INSTAMART CARD -->
+            <div onclick="openInstamartLink()" class="bg-[#0b131a] blue-glow rounded-3xl p-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
                 <div class="flex justify-between items-start mb-4">
                     <span class="bg-sky-950/50 text-sky-400 text-[10px] px-3 py-1 rounded-full border border-sky-900/60 font-bold uppercase tracking-wider">
                         <i class="fa-solid fa-shopping-cart mr-1"></i> INSTAMART
                     </span>
-                    <button class="w-8 h-8 rounded-full bg-sky-500/10 text-sky-500/50 flex items-center justify-center pointer-events-none">
-                        <i class="fa-solid fa-lock text-xs"></i>
+                    <button class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
                 </div>
                 
-                <div class="w-14 h-14 bg-sky-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4 opacity-80">
+                <div class="w-14 h-14 bg-sky-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4">
                     <i class="fa-solid fa-shopping-bag"></i>
                 </div>
 
-                <h3 class="text-xl font-bold mb-1 text-gray-300">Swiggy Instamart</h3>
-                <p class="text-xs text-gray-500 leading-relaxed mb-4">Groceries, snacks & essentials delivered in minutes. Stock up with instant delivery!</p>
+                <h3 class="text-xl font-bold mb-1">Swiggy Instamart</h3>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">Groceries, snacks & essentials delivered in minutes. Stock up with instant delivery!</p>
                 
-                <div class="flex flex-wrap gap-2 text-[11px] opacity-60">
-                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md">🛒 10-Min Delivery</span>
-                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md">💰 Best Prices</span>
+                <div class="flex flex-wrap gap-2 text-[11px]">
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">🛒 10-Min Delivery</span>
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">💰 Best Prices</span>
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">📦 Fresh Stock</span>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- FOOTER CREDITS -->
+    <!-- FOOTER CREDITS (Updated to GBX) -->
     <footer class="text-center text-[10px] text-gray-600 tracking-wider uppercase mt-8 mb-2">
-        DEVELOPED BY <span class="text-emerald-400">GBX</span> X <span class="text-emerald-400">SWIGGY</span>
+        DEVELOPED BY <span class="text-emerald-400">GBX</span>
     </footer>
 
     <script>
         // Initialize Telegram WebApp
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Screen ko full size karne ke liye
+        tg.expand();
 
-        // 1. Dynamic Greeting Based on Time
+        // 1. Automatic Time Greeting
         const hrs = new Date().getHours();
         let greet = "Hello";
         if (hrs < 12) greet = "Good morning";
@@ -140,14 +140,11 @@
         else greet = "Good evening";
         document.getElementById('greeting').innerText = greet;
 
-        // 2. Automatically Fetch Telegram User DP and Name
+        // 2. Fetch Telegram User Data Automatically
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
-            
-            // Name placeholder badlein
             document.getElementById('user-name').innerText = user.first_name;
             
-            // Photo URL user ki fetch karke set karein
             if (user.photo_url) {
                 const dpImg = document.getElementById('user-dp');
                 dpImg.src = user.photo_url;
@@ -156,12 +153,14 @@
             }
         }
 
-            // 3. Click Function for Swiggy Food Card
+        // 3. Custom Redirect Links
         function openSwiggyLink() {
-            // WebApp ke andar hi redirect karne ke liye:
-            window.location.href = "https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797";
+            tg.openLink("https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797");
         }
-        
+
+        function openInstamartLink() {
+            tg.openLink("https://www.swiggy.com/instamart/jhs-landing?custom_back=true&layoutId=33909&customerPage=STORES_MxN_95&x-channel=jiohotstar&session_bypass=1784282693696");
+        }
     </script>
 </body>
 </html>
