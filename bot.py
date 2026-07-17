@@ -2,6 +2,7 @@ import os
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from flask import Flask
+import threading
 
 # Flask server banayein taaki Render ise dynamic web service maane
 app = Flask(__name__)
@@ -82,12 +83,17 @@ def handle_verification(call):
     else:
         bot.answer_callback_query(call.id, "❌ Please join all 3 channels first!", show_alert=True)
 
-if __name__ == '__main__':
-    import threading
-    # Bot ko functional crash se bachane ke liye non-stop polling setup
-bot.infinity_polling(timeout=10,long_polling_timeout=5)
+# Bot ko background thread me chalane ke liye function
+def run_bot():
+    bot.infinity_polling(timeout=10, long_polling_timeout=5)
 
-    # Render ka dynamic port uthane ke liye
-    port = int(os.environ.get("PORT", 5000))
+if __name__ == '__main__':
+    # Telegram bot ko alag thread me chalu karenge taaki Flask block na ho
+    bot_thread = threading.Thread(target=run_bot)
+    bot_thread.daemon = True
+    bot_thread.start()
+
+    # Render ka dynamic port uthane ke liye aur Flask ko active rakhne ke liye
+    port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
     
