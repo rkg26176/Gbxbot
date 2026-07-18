@@ -20,6 +20,7 @@ CHANNELS = {
     "-1003332858806": {"name": "📢 GBX LOOT", "url": "https://t.me/+6ByfGDRBKgsxMjZl"},
     "-1003630519339": {"name": "📢 GBX EARN", "url": "https://t.me/+OWrCoeF-JutmNjg1"},
     "-1003197501531": {"name": "📢 GBX ZONE", "url": "https://t.me/+f2mWfDs6EUIxYTBl"}
+    "-1003862251237": {"name": "📢 GBX GC", "url": "https://t.me/+O_-kEF2f5f1kMjdl"}
 }
 
 def check_user_joined(user_id):
