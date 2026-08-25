@@ -56,14 +56,29 @@
             <span class="text-emerald-400 font-medium">🔥 2,847 <span class="text-gray-400">deals claimed in last hour</span></span>
         </div>
 
-        <!-- MAIN HERO TITLE -->
-        <div class="mb-6">
-            <p class="text-[10px] tracking-widest text-emerald-400 font-bold uppercase mb-1">● MEGA DEALS EXCLUSIVE</p>
-            <h1 class="text-4xl font-extrabold tracking-tight">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
+        <!-- MAIN HERO TITLE & FIXED IMAGE SHAPE CONTAINER -->
+        <div class="mb-6 relative">
+            <!-- Text Content -->
+            <div class="pr-28">
+                <p class="text-[10px] tracking-widest text-emerald-400 font-bold uppercase mb-1">● MEGA DEALS EXCLUSIVE</p>
+                <h1 class="text-4xl font-extrabold tracking-tight">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
+            </div>
+            
+            <!-- Absolute Positioned Fixed Blank Shape Box for Image -->
+            <div class="absolute right-0 top-0 w-24 h-28 rounded-2xl overflow-hidden border-2 border-dashed border-orange-500/60 bg-gray-900 shadow-xl flex items-center justify-center">
+                <!-- Image Tag -->
+                <img src="IMG_20260624_170122_521.jpg" alt="Arena Banner" class="w-full h-full object-cover absolute inset-0 z-10" onerror="this.style.display='none'; document.getElementById('fallback-shape').style.display='flex';">
+                
+                <!-- Fallback Blank Box Shape -->
+                <div id="fallback-shape" class="absolute inset-0 hidden flex-col items-center justify-center p-1 text-center bg-gray-900">
+                    <i class="fa-solid fa-image text-orange-400 text-lg mb-1"></i>
+                    <span class="text-[8px] text-orange-300 font-medium">Blank Space</span>
+                </div>
+            </div>
         </div>
 
         <!-- SECTION DIVIDER -->
-        <div class="flex items-center gap-2 mb-5">
+        <div class="flex items-center gap-2 mb-5 mt-4">
             <span class="text-[10px] font-bold tracking-wider text-gray-500 uppercase">CHOOSE YOUR ARENA</span>
             <div class="h-[1px] bg-gray-800 flex-grow"></div>
         </div>
@@ -122,7 +137,7 @@
         </main>
     </div>
 
-    <!-- FOOTER CREDITS (Updated to GBX) -->
+    <!-- FOOTER CREDITS -->
     <footer class="text-center text-[10px] text-gray-600 tracking-wider uppercase mt-8 mb-2">
         DEVELOPED BY <span class="text-emerald-400">GBX</span>
     </footer>
@@ -153,14 +168,12 @@
             }
         }
 
-                // 3. Custom Redirect Links (Bot ke andar hi open karne ke liye)
+        // 3. Custom Redirect Links
         function openSwiggyLink() {
-            // tg.openLink hataya, window.location.href lagaya taaki frame ke andar hi rahe
             window.location.href = "https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797";
         }
 
         function openInstamartLink() {
-            // Yahan bhi wahi change
             window.location.href = "https://www.swiggy.com/instamart/jhs-landing?custom_back=true&layoutId=33909&customerPage=STORES_MxN_95&x-channel=jiohotstar&session_bypass=1784282693696";
         }
     </script>
