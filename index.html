@@ -1,89 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GBX Automator Pro</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07090e; color: #f8fafc; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: rgba(15, 23, 42, 0.85); border: 1px solid #0284c744; border-radius: 14px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(2, 132, 199, 0.25); }
-        h2 { margin-top: 0; color: #38bdf8; font-size: 20px; text-align: center; }
-        label { display: block; margin-top: 15px; font-size: 13px; color: #94a3b8; }
-        input { width: 100%; padding: 12px; margin-top: 5px; background: #07090e; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-        button { background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 15px; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
-        button:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); }
-        #logArea { margin-top: 15px; background: #07090e; padding: 10px; border-radius: 8px; border: 1px solid #334155; height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #22c55e; }
-        #containerBox { display: none; }
-    </style>
-</head>
-<body>
+import time
+import random
+import undetected_chromedriver as uc
 
-    <div class="card">
-        <h2>GBX Automator Pro</h2>
-        <label>Target URL / Link</label>
-        <input type="text" id="targetUrl" placeholder="https://example.com">
+def _get_mock_location():
+    # झारखंड/रांची या किसी भी रैंडम लोकेशन के आसपास के कोऑर्डिनेट्स
+    return str(23.3441 + random.uniform(-0.1, 0.1)), str(85.3096 + random.uniform(-0.1, 0.1))
+
+def _random_device_id() -> str:
+    return f"device-{random.randint(10000000, 99999999)}"
+
+def _get_random_device_profile():
+    lat, lng = _get_mock_location()
+    dev_id = _random_device_id()
+    
+    # अलग-अलग मोबाइल ब्रांड्स, मॉडल्स और मोबाइल यूजर-एजेंट्स की लिस्ट
+    brands = [
+        {
+            "manufacturer": "Xiaomi",
+            "model": "M2012K11AG",
+            "ua": "Mozilla/5.0 (Linux; Android 13; M2012K11AG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+            "width": 393, "height": 851
+        },
+        {
+            "manufacturer": "Samsung",
+            "model": "SM-S911B",
+            "ua": "Mozilla/5.0 (Linux; Android 14; SM-S911B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36",
+            "width": 412, "height": 915
+        },
+        {
+            "manufacturer": "VIVO",
+            "model": "V2227",
+            "ua": "Mozilla/5.0 (Linux; Android 14; V2227) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+            "width": 393, "height": 873
+        },
+        {
+            "manufacturer": "OPPO",
+            "model": "CPH2481",
+            "ua": "Mozilla/5.0 (Linux; Android 13; CPH2481) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36",
+            "width": 360, "height": 800
+        }
+    ]
+    
+    profile = random.choice(brands)
+    profile["latitude"] = lat
+    profile["longitude"] = lng
+    profile["deviceid"] = dev_id
+    profile["swuid"] = f"swuid-{random.randint(1000, 9999)}"
+    return profile
+
+def start_virtual_browser_automation(target_url, total_views):
+    for i in range(total_views):
+        # हर सेशन के लिए नया स्पूफ्ड प्रोफाइल जनरेट करना
+        profile = _get_random_device_profile()
+        print(f"\n[RUNNING] Session #{i+1} | Brand: {profile['manufacturer']} {profile['model']} | DeviceID: {profile['deviceid']}")
         
-        <label>Target Views / Count</label>
-        <input type="number" id="targetCount" placeholder="e.g. 50" value="10">
-
-        <button onclick="startProcess()">Start Execution</button>
-
-        <div id="logArea">Logs will appear here...</div>
-        <div id="containerBox"></div>
-    </div>
-
-    <script>
-        function log(msg) {
-            const area = document.getElementById('logArea');
-            area.innerHTML += msg + "<br>";
-            area.scrollTop = area.scrollHeight;
-        }
-
-        function startProcess() {
-            const url = document.getElementById('targetUrl').value.trim();
-            const count = parseInt(document.getElementById('targetCount').value) || 0;
-            const container = document.getElementById('containerBox');
+        options = uc.ChromeOptions()
+        
+        # मोबाइल यूजर-एजेंट सेट करना
+        options.add_argument(f"--user-agent={profile['ua']}")
+        
+        # मोबाइल जैसा व्यू पोर्ट (Screen Size) सेट करना
+        options.add_argument(f"--window-size={profile['width']},{profile['height']}")
+        
+        # हेडलेस मोड (अगर बैकग्राउंड में चलाना है तो इसे अनकमेंट करें, वर्ना ब्राउज़र सामने खुलेगा)
+        # options.add_argument("--headless=new")
+        
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        
+        # वर्चुअल ब्राउज़र ड्राइवर शुरू करना
+        driver = uc.Chrome(options=options)
+        
+        try:
+            # सबसे पहले गूगल खोलना
+            driver.get("https://www.google.com")
+            time.sleep(2)
             
-            container.innerHTML = "";
-            if (!url) {
-                alert("Please enter a valid URL!");
-                return;
-            }
+            # अब टारगेट लिंक खोलना
+            print(f"[NAVIGATING] Loading target URL: {target_url}")
+            driver.get(target_url)
+            
+            # वीडियो या पेज को 5 से 10 सेकंड तक देखना
+            watch_time = random.randint(5, 10)
+            print(f"[WATCHING] Staying on page for {watch_time} seconds...")
+            time.sleep(watch_time)
+            
+            print(f"[SUCCESS] Session #{i+1} completed.")
+            
+        except Exception as e:
+            print(f"[ERROR] Session #{i+1} failed: {e}")
+            
+        finally:
+            # काम खत्म होते ही ब्राउज़र बंद और डिलीट हो जाएगा
+            driver.quit()
+            print(f"[CLEANUP] Virtual browser session #{i+1} closed & cleaned up.")
 
-            log(`[INFO] Initializing task for: ${url}`);
-            log(`[INFO] Target count set to: ${count}`);
+# ==========================
+# यहाँ अपना लिंक और व्यूज़ डालें
+# ==========================
+target_url = "https://example.com"
+total_views = 5
 
-            let spawned = 0;
-
-            const interval = setInterval(() => {
-                if (spawned >= count) {
-                    clearInterval(interval);
-                    log(`[SUCCESS] Task completed. All instances processed.`);
-                    return;
-                }
-
-                spawned++;
-                let frameId = `frame_${spawned}`;
-                log(`[RUNNING] Triggering instance #${spawned}...`);
-
-                let iframe = document.createElement('iframe');
-                iframe.src = url;
-                iframe.style.display = "none";
-                iframe.id = frameId;
-                
-                container.appendChild(iframe);
-
-                setTimeout(() => {
-                    let el = document.getElementById(frameId);
-                    if (el) {
-                        el.remove();
-                        log(`[CLEANUP] Instance #${spawned} cleared.`);
-                    }
-                }, 3000);
-
-            }, 800);
-        }
-    </script>
-</body>
-</html>
+start_virtual_browser_automation(target_url, total_views)
