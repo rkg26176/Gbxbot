@@ -1,96 +1,70 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GBX Web View Automator</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07090e; color: #f8fafc; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: rgba(15, 23, 42, 0.85); border: 1px solid #0284c744; border-radius: 14px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(2, 132, 199, 0.25); }
-        h2 { margin-top: 0; color: #38bdf8; font-size: 20px; text-align: center; }
-        label { display: block; margin-top: 15px; font-size: 13px; color: #94a3b8; }
-        input { width: 100%; padding: 12px; margin-top: 5px; background: #07090e; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-        button { background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 15px; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
-        button:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); }
-        #logArea { margin-top: 15px; background: #07090e; padding: 10px; border-radius: 8px; border: 1px solid #334155; height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #22c55e; }
-        #containerBox { display: none; margin-top: 15px; text-align: center; }
-    </style>
-</head>
-<body>
+import asyncio
+import aiohttp
+import random
 
-    <div class="card">
-        <h2>GBX Automator</h2>
-        <label>Target URL / Link</label>
-        <input type="text" id="targetUrl" placeholder="https://example.com">
-        
-        <label>Target Views / Count</label>
-        <input type="number" id="targetCount" placeholder="e.g. 50" value="10">
+def _get_mock_location():
+    # झारखंड/रांची या किसी भी रैंडम लोकेशन के आसपास के कोऑर्डिनेट्स
+    return str(23.3441 + random.uniform(-0.1, 0.1)), str(85.3096 + random.uniform(-0.1, 0.1))
 
-        <button onclick="startProcess()">Start Execution</button>
+def _random_device_id() -> str:
+    return f"device-{random.randint(10000000, 99999999)}"
 
-        <div id="logArea">Logs will appear here...</div>
-        
-        <!-- डायनेमिक फ्रेम्स दिखाने की जगह -->
-        <div id="containerBox"></div>
-    </div>
+def _build_app_headers() -> dict:
+    lat, lng = _get_mock_location()
+    dev_id = _random_device_id()
+    
+    # अलग-अलग मोबाइल ब्रांड्स और मॉडल्स की लिस्ट ताकि हर बार नया डिवाइस स्पूफ हो
+    brands = [
+        {"manufacturer": "Xiaomi", "model": "M2012K11AG", "ua": "Mozilla/5.0 (Linux; Android 13; M2012K11AG) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"},
+        {"manufacturer": "Samsung", "model": "SM-S911B", "ua": "Mozilla/5.0 (Linux; Android 14; SM-S911B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"},
+        {"manufacturer": "VIVO", "model": "V2227", "ua": "Mozilla/5.0 (Linux; Android 14; V2227) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"},
+        {"manufacturer": "OPPO", "model": "CPH2481", "ua": "Mozilla/5.0 (Linux; Android 13; CPH2481) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36"}
+    ]
+    
+    selected_brand = random.choice(brands)
 
-    <script>
-        function log(msg) {
-            const area = document.getElementById('logArea');
-            area.innerHTML += msg + "<br>";
-            area.scrollTop = area.scrollHeight;
-        }
+    return {
+        "user-agent": selected_brand["ua"],
+        "content-type": "application/json; charset=utf-8",
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "accept-encoding": "gzip, deflate",
+        "accept-language": "en-US,en;q=0.5",
+        "version-code": str(random.randint(1000, 2000)),
+        "app-version": "2.4.1",
+        "os-version": "14",
+        "manufacturer": selected_brand["manufacturer"],
+        "model-name": selected_brand["model"],
+        "swuid": f"swuid-{random.randint(1000, 9999)}",
+        "deviceid": dev_id,
+        "latitude": lat,
+        "longitude": lng,
+    }
 
-        function startProcess() {
-            const url = document.getElementById('targetUrl').value.trim();
-            const count = parseInt(document.getElementById('targetCount').value) || 0;
-            const container = document.getElementById('containerBox');
+async def hit_target(session, url):
+    try:
+        headers = _build_app_headers()
+        async with session.get(url, headers=headers, timeout=10) as response:
+            print(f"[SUCCESS] Brand: {headers['manufacturer']} | Device ID: {headers['deviceid']} | Status: {response.status}")
+    except Exception as e:
+        print(f"[ERROR] Failed: {e}")
+
+async def start_automation(url, total_requests):
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        for i in range(total_requests):
+            print(f"[RUNNING] Dispatching customized spoofed request #{i+1}...")
+            tasks.append(hit_target(session, url))
             
-            container.innerHTML = "";
-            if (!url) {
-                alert("Please enter a valid URL!");
-                return;
-            }
+            if len(tasks) >= 10:
+                await asyncio.gather(*tasks)
+                tasks = []
+                await asyncio.sleep(0.5)
 
-            log(`[INFO] Initializing task for: ${url}`);
-            log(`[INFO] Target count set to: ${count}`);
+        if tasks:
+            await asyncio.gather(*tasks)
 
-            let spawned = 0;
+# यहाँ अपना टारगेट लिंक और जितनी बार चलाना है वो संख्या डालो
+target_url = "https://example.com"
+requests_count = 50
 
-            // एक सिमुलेटेड लूप जो एक-एक करके फ्रेम बनाएगा और तय समय बाद हटाएगा
-            const interval = setInterval(() => {
-                if (spawned >= count) {
-                    clearInterval(interval);
-                    log(`[SUCCESS] Task completed. All instances processed.`);
-                    return;
-                }
-
-                spawned++;
-                let frameId = `frame_${spawned}`;
-                log(`[RUNNING] Creating instance #${spawned}...`);
-
-                // डायनेमिक रूप से छुपा हुआ फ्रेम या टैब जैसा एलिमेंट बनाना
-                let iframe = document.createElement('iframe');
-                iframe.src = url;
-                iframe.style.width = "50px";
-                iframe.style.height = "50px";
-                iframe.style.display = "none";
-                iframe.id = frameId;
-                
-                container.appendChild(iframe);
-
-                // कुछ सेकंड बाद उसे ऑटोमैटिक रिमूव/डिलीट करना ताकि लोड न पड़े
-                setTimeout(() => {
-                    let el = document.getElementById(frameId);
-                    if (el) {
-                        el.remove();
-                        log(`[CLEANUP] Instance #${spawned} terminated & cleaned up.`);
-                    }
-                }, 4000); // 4 सेकंड बाद डिलीट
-
-            }, 1000); // हर 1 सेकंड में एक नया इंस्टेंस
-        }
-    </script>
-</body>
-</html>
+asyncio.run(start_automation(target_url, requests_count))
