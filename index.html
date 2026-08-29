@@ -3,86 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GBX Automator Pro</title>
+    <title>IPL SWIGGY ARENA</title>
+    <!-- Tailwind CSS for Premium Styling -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #07090e; color: #f8fafc; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: rgba(15, 23, 42, 0.85); border: 1px solid #0284c744; border-radius: 14px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(2, 132, 199, 0.25); }
-        h2 { margin-top: 0; color: #38bdf8; font-size: 20px; text-align: center; }
-        label { display: block; margin-top: 15px; font-size: 13px; color: #94a3b8; }
-        input { width: 100%; padding: 12px; margin-top: 5px; background: #07090e; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        input:focus { border-color: #38bdf8; outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-        button { background: linear-gradient(135deg, #0284c7, #0ea5e9); color: white; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; font-size: 15px; box-shadow: 0 0 12px rgba(2, 132, 199, 0.4); }
-        button:hover { box-shadow: 0 0 20px rgba(56, 189, 248, 0.8); }
-        #logArea { margin-top: 15px; background: #07090e; padding: 10px; border-radius: 8px; border: 1px solid #334155; height: 120px; overflow-y: auto; font-family: monospace; font-size: 11px; color: #22c55e; }
-        #containerBox { display: none; }
+        body {
+            background-color: #0d0e12;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .orange-glow {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.25);
+        }
+        .blue-glow {
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
     </style>
 </head>
-<body>
+<body class="p-4 max-w-md mx-auto min-h-screen flex flex-col justify-between select-none">
 
-    <div class="card">
-        <h2>GBX Automator Pro</h2>
-        <label>Target URL / Link</label>
-        <input type="text" id="targetUrl" placeholder="https://example.com">
-        
-        <label>Target Views / Count</label>
-        <input type="number" id="targetCount" placeholder="e.g. 50" value="10">
+    <div>
+        <!-- TOP HEADER (Dynamic User Data) -->
+        <header class="flex items-center justify-between mb-6 mt-2">
+            <div class="flex items-center gap-3">
+                <!-- User Profile Picture -->
+                <div class="w-12 h-12 rounded-full border-2 border-orange-500 overflow-hidden bg-gray-800 flex items-center justify-center">
+                    <img id="user-dp" src="https://via.placeholder.com/150" alt="DP" class="w-full h-full object-cover hidden">
+                    <i id="dp-fallback" class="fa-solid fa-user text-gray-500 text-xl"></i>
+                </div>
+                <div>
+                    <!-- Dynamic Greeting & Name -->
+                    <h2 class="text-sm font-semibold text-gray-300"><span id="greeting">Hello</span>, <span id="user-name">User</span>! 👋</h2>
+                    <p class="text-xs text-gray-500">Welcome to the Arena</p>
+                </div>
+            </div>
+            <!-- Live Indicator -->
+            <span class="bg-emerald-950/80 text-emerald-400 text-[11px] px-2.5 py-1 rounded-full border border-emerald-500/50 font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
+            </span>
+        </header>
 
-        <button onclick="startProcess()">Start Execution</button>
+        <!-- LIVE STATS BANNER -->
+        <div class="bg-gray-900/40 border border-gray-800/60 rounded-full px-4 py-2 flex items-center justify-between text-xs mb-6">
+            <span class="text-gray-400">Combos available</span>
+            <span class="text-emerald-400 font-medium">🔥 2,847 <span class="text-gray-400">deals claimed in last hour</span></span>
+        </div>
 
-        <div id="logArea">Logs will appear here...</div>
-        <div id="containerBox"></div>
+        <!-- MAIN HERO TITLE -->
+        <div class="mb-6">
+            <p class="text-[10px] tracking-widest text-emerald-400 font-bold uppercase mb-1">● MEGA DEALS EXCLUSIVE</p>
+            <h1 class="text-4xl font-extrabold tracking-tight">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
+        </div>
+
+        <!-- SECTION DIVIDER -->
+        <div class="flex items-center gap-2 mb-5">
+            <span class="text-[10px] font-bold tracking-wider text-gray-500 uppercase">CHOOSE YOUR ARENA</span>
+            <div class="h-[1px] bg-gray-800 flex-grow"></div>
+        </div>
+
+        <!-- MAIN CARDS CONTAINER -->
+        <main class="space-y-4">
+            <!-- SWIGGY FOOD CARD -->
+            <div onclick="openSwiggyLink()" class="bg-[#16120e] orange-glow rounded-3xl p-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-orange-950/50 text-orange-400 text-[10px] px-3 py-1 rounded-full border border-orange-900/60 font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-utensils mr-1"></i> FOOD DELIVERY
+                    </span>
+                    <button class="w-8 h-8 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+                
+                <div class="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4">
+                    <i class="fa-solid fa-hamburger"></i>
+                </div>
+
+                <h3 class="text-xl font-bold mb-1">Swiggy Food</h3>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">Massive discounts on your favourite restaurants. Claim exclusive deals and enjoy lightning-fast delivery!</p>
+                
+                <div class="flex flex-wrap gap-2 text-[11px]">
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🔥 60% OFF</span>
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">⚡ Free Delivery</span>
+                    <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🎉 Mega Combos</span>
+                </div>
+            </div>
+
+            <!-- INSTAMART CARD -->
+            <div onclick="openInstamartLink()" class="bg-[#0b131a] blue-glow rounded-3xl p-5 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-sky-950/50 text-sky-400 text-[10px] px-3 py-1 rounded-full border border-sky-900/60 font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-shopping-cart mr-1"></i> INSTAMART
+                    </span>
+                    <button class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+                
+                <div class="w-14 h-14 bg-sky-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-4">
+                    <i class="fa-solid fa-shopping-bag"></i>
+                </div>
+
+                <h3 class="text-xl font-bold mb-1">Swiggy Instamart</h3>
+                <p class="text-xs text-gray-400 leading-relaxed mb-4">Groceries, snacks & essentials delivered in minutes. Stock up with instant delivery!</p>
+                
+                <div class="flex flex-wrap gap-2 text-[11px]">
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">🛒 10-Min Delivery</span>
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">💰 Best Prices</span>
+                    <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">📦 Fresh Stock</span>
+                </div>
+            </div>
+        </main>
     </div>
 
+    <!-- FOOTER CREDITS (Updated to GBX) -->
+    <footer class="text-center text-[10px] text-gray-600 tracking-wider uppercase mt-8 mb-2">
+        DEVELOPED BY <span class="text-emerald-400">GBX</span>
+    </footer>
+
     <script>
-        function log(msg) {
-            const area = document.getElementById('logArea');
-            area.innerHTML += msg + "<br>";
-            area.scrollTop = area.scrollHeight;
+        // Initialize Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        // 1. Automatic Time Greeting
+        const hrs = new Date().getHours();
+        let greet = "Hello";
+        if (hrs < 12) greet = "Good morning";
+        else if (hrs < 17) greet = "Good afternoon";
+        else greet = "Good evening";
+        document.getElementById('greeting').innerText = greet;
+
+        // 2. Fetch Telegram User Data Automatically
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            const user = tg.initDataUnsafe.user;
+            document.getElementById('user-name').innerText = user.first_name;
+            
+            if (user.photo_url) {
+                const dpImg = document.getElementById('user-dp');
+                dpImg.src = user.photo_url;
+                dpImg.classList.remove('hidden');
+                document.getElementById('dp-fallback').classList.add('hidden');
+            }
         }
 
-        function startProcess() {
-            const url = document.getElementById('targetUrl').value.trim();
-            const count = parseInt(document.getElementById('targetCount').value) || 0;
-            const container = document.getElementById('containerBox');
-            
-            container.innerHTML = "";
-            if (!url) {
-                alert("Please enter a valid URL!");
-                return;
-            }
+                // 3. Custom Redirect Links (Bot ke andar hi open karne ke liye)
+        function openSwiggyLink() {
+            // tg.openLink hataya, window.location.href lagaya taaki frame ke andar hi rahe
+            window.location.href = "https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797";
+        }
 
-            log(`[INFO] Initializing task for: ${url}`);
-            log(`[INFO] Target count set to: ${count}`);
-
-            let spawned = 0;
-
-            const interval = setInterval(() => {
-                if (spawned >= count) {
-                    clearInterval(interval);
-                    log(`[SUCCESS] Task completed.`);
-                    return;
-                }
-
-                spawned++;
-                let frameId = `frame_${spawned}`;
-                log(`[RUNNING] Triggering instance #${spawned}...`);
-
-                let iframe = document.createElement('iframe');
-                iframe.src = url;
-                iframe.style.display = "none";
-                iframe.id = frameId;
-                
-                container.appendChild(iframe);
-
-                setTimeout(() => {
-                    let el = document.getElementById(frameId);
-                    if (el) {
-                        el.remove();
-                        log(`[CLEANUP] Instance #${spawned} cleared.`);
-                    }
-                }, 3000);
-
-            }, 800);
+        function openInstamartLink() {
+            // Yahan bhi wahi change
+            window.location.href = "https://www.swiggy.com/instamart/jhs-landing?custom_back=true&layoutId=33909&customerPage=STORES_MxN_95&x-channel=jiohotstar&session_bypass=1784282693696";
         }
     </script>
 </body>
