@@ -11,6 +11,7 @@
     <!-- Telegram WebApp SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        /* Default Night Mode Variables */
         :root {
             --bg-color: #0d0e12;
             --card-food-bg: #16120e;
@@ -21,14 +22,15 @@
             --border-divider: #1f2937;
         }
 
+        /* Proper Day/Light Mode Variables */
         .light-mode {
-            --bg-color: #0f172a;
-            --card-food-bg: #1e1b18;
-            --card-insta-bg: #0f1e2e;
-            --text-main: #ffffff;
-            --text-sub: #cbd5e1;
-            --stats-bg: rgba(30, 41, 59, 0.8);
-            --border-divider: #334155;
+            --bg-color: #f8fafc;
+            --card-food-bg: #fff7ed;
+            --card-insta-bg: #f0f9ff;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --stats-bg: rgba(226, 232, 240, 0.8);
+            --border-divider: #cbd5e1;
         }
 
         html, body {
@@ -44,24 +46,22 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Red & White Shaded Title with Neon Glow */
         .brand-neon-title {
-            background: linear-gradient(135deg, #ff4d4d 0%, #ffffff 50%, #ff1a1a 100%);
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff8080 50%, #ff1a1a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 12px rgba(255, 51, 51, 0.8));
+            filter: drop-shadow(0 0 10px rgba(255, 51, 51, 0.6));
         }
 
-        /* Neon Glow Cards */
         .orange-glow {
-            box-shadow: 0 0 25px rgba(249, 115, 22, 0.2);
-            border: 1px solid rgba(249, 115, 22, 0.35);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
+            border: 1px solid rgba(249, 115, 22, 0.4);
             background: var(--card-food-bg);
         }
         
         .blue-glow {
-            box-shadow: 0 0 25px rgba(14, 165, 233, 0.2);
-            border: 1px solid rgba(14, 165, 233, 0.35);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.2);
+            border: 1px solid rgba(14, 165, 233, 0.4);
             background: var(--card-insta-bg);
         }
 
@@ -71,123 +71,124 @@
         }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto flex flex-col justify-between select-none">
+<body class="p-3 max-w-md mx-auto flex flex-col justify-between select-none">
 
-    <!-- TOP SECTION: HEADER & HERO TEXT -->
-    <div class="flex flex-col gap-3">
-        <!-- BRAND TITLE AT THE VERY TOP -->
-        <div class="flex items-center justify-between pt-1">
-            <h1 class="brand-neon-title text-2xl font-black tracking-wider uppercase">GBX IPL ARENA</h1>
+    <!-- TOP SECTION -->
+    <div class="flex flex-col gap-2">
+        <!-- BRAND TITLE & THEME TOGGLE -->
+        <div class="flex items-center justify-between">
+            <h1 class="brand-neon-title text-xl font-black tracking-wider uppercase">GBX IPL ARENA</h1>
             
-            <!-- Day / Night Toggle -->
-            <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-gray-800/80 border border-gray-700 flex items-center justify-center text-amber-400 cursor-pointer active:scale-95 transition-transform">
+            <button id="theme-toggle" onclick="toggleTheme()" class="w-8 h-8 rounded-full bg-gray-800/20 border border-gray-500/30 flex items-center justify-center text-amber-500 cursor-pointer active:scale-95 transition-transform">
                 <i id="theme-icon" class="fa-solid fa-sun text-xs"></i>
             </button>
         </div>
 
-        <!-- USER PROFILE & GREETING HEADER -->
+        <!-- USER PROFILE & GREETING -->
         <header class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <!-- User Profile Picture -->
-                <div class="w-11 h-11 rounded-full border-2 border-orange-500 overflow-hidden bg-gray-800 flex items-center justify-center shrink-0 shadow-md">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-full border-2 border-orange-500 overflow-hidden bg-gray-800 flex items-center justify-center shrink-0 shadow-md">
                     <img id="user-dp" src="https://via.placeholder.com/150" alt="DP" class="w-full h-full object-cover hidden">
-                    <i id="dp-fallback" class="fa-solid fa-user text-gray-400 text-base"></i>
+                    <i id="dp-fallback" class="fa-solid fa-user text-gray-400 text-sm"></i>
                 </div>
                 <div>
-                    <!-- Dynamic Greeting & Name -->
-                    <h2 class="text-xs font-semibold text-gray-300"><span id="greeting">Hello</span>, <span id="user-name" class="text-white font-bold">User</span>! 👋</h2>
-                    <p class="text-[11px] text-gray-400">Welcome to the Arena</p>
+                    <h2 class="text-xs font-semibold" style="color: var(--text-sub);"><span id="greeting">Hello</span>, <span id="user-name" class="font-bold" style="color: var(--text-main);">User</span>! 👋</h2>
+                    <p class="text-[10px]" style="color: var(--text-sub);">Welcome to the Arena</p>
                 </div>
             </div>
-            <!-- Live Indicator -->
-            <span class="bg-emerald-950/80 text-emerald-400 text-[10px] px-2.5 py-1 rounded-full border border-emerald-500/50 font-bold flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
+            
+            <span class="bg-emerald-950/80 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full border border-emerald-500/50 font-bold flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span> LIVE
             </span>
         </header>
 
         <!-- LIVE STATS BANNER -->
-        <div class="stats-banner border border-gray-800/60 rounded-full px-4 py-2 flex items-center justify-between text-xs">
-            <span class="text-gray-400 text-[11px]">Combos available</span>
-            <span class="text-emerald-400 font-medium text-[11px]">🔥 2,847 <span class="text-gray-400">deals claimed in last hour</span></span>
+        <div class="stats-banner border rounded-full px-3 py-1.5 flex items-center justify-between text-[11px]">
+            <span style="color: var(--text-sub);">Combos available</span>
+            <span class="text-emerald-500 font-semibold">🔥 2,847 <span class="font-normal" style="color: var(--text-sub);">claimed</span></span>
         </div>
 
         <!-- MAIN HERO TITLE -->
         <div>
-            <p class="text-[10px] tracking-widest text-emerald-400 font-bold uppercase mb-0.5">● MEGA DEALS EXCLUSIVE</p>
-            <h1 class="text-3xl font-extrabold tracking-tight leading-none">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
+            <p class="text-[9px] tracking-widest text-emerald-500 font-bold uppercase">● MEGA DEALS EXCLUSIVE</p>
+            <h1 class="text-2xl font-extrabold tracking-tight leading-none mt-0.5">Grab. Eat.<br><span class="text-orange-500">Save Big.</span></h1>
         </div>
 
         <!-- SECTION DIVIDER -->
         <div class="flex items-center gap-2">
-            <span class="text-[10px] font-bold tracking-wider text-gray-400 uppercase">CHOOSE YOUR ARENA</span>
-            <div class="h-[1px] bg-gray-800 flex-grow"></div>
+            <span class="text-[9px] font-bold tracking-wider uppercase" style="color: var(--text-sub);">CHOOSE YOUR ARENA</span>
+            <div class="h-[1px] flex-grow" style="background-color: var(--border-divider);"></div>
         </div>
     </div>
 
-    <!-- MAIN CARDS CONTAINER -->
-    <main class="flex flex-col gap-3.5 my-auto">
+    <!-- MAIN CARDS CONTAINER (Compact & Non-Cutting) -->
+    <main class="flex flex-col gap-2.5 my-auto">
         <!-- SWIGGY FOOD CARD -->
-        <div onclick="openSwiggyLink()" class="orange-glow rounded-3xl p-4 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
-            <div class="flex justify-between items-start mb-3">
-                <span class="bg-orange-950/50 text-orange-400 text-[10px] px-3 py-1 rounded-full border border-orange-900/60 font-bold uppercase tracking-wider">
+        <div onclick="openSwiggyLink()" class="orange-glow rounded-2xl p-3 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
+            <div class="flex justify-between items-start mb-1.5">
+                <span class="bg-orange-500/10 text-orange-500 text-[9px] px-2.5 py-0.5 rounded-full border border-orange-500/30 font-bold uppercase tracking-wider">
                     <i class="fa-solid fa-utensils mr-1"></i> FOOD DELIVERY
                 </span>
-                <button class="w-8 h-8 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center pointer-events-none">
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                <button class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-500 flex items-center justify-center pointer-events-none">
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
             </div>
             
-            <div class="w-12 h-12 bg-orange-500 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg mb-3">
-                <i class="fa-solid fa-hamburger"></i>
+            <div class="flex items-center gap-2.5 mb-1.5">
+                <div class="w-9 h-9 bg-orange-500 rounded-xl flex items-center justify-center text-white text-base shadow-md shrink-0">
+                    <i class="fa-solid fa-hamburger"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold leading-tight">Swiggy Food</h3>
+                    <p class="text-[10px] leading-tight line-clamp-1" style="color: var(--text-sub);">Massive discounts on your favourite restaurants & lightning-fast delivery!</p>
+                </div>
             </div>
-
-            <h3 class="text-xl font-bold mb-1">Swiggy Food</h3>
-            <p class="text-xs text-gray-400 leading-relaxed mb-3">Massive discounts on your favourite restaurants. Claim exclusive deals and enjoy lightning-fast delivery!</p>
             
-            <div class="flex flex-wrap gap-2 text-[11px]">
-                <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🔥 60% OFF</span>
-                <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">⚡ Free Delivery</span>
-                <span class="bg-orange-950/40 text-orange-400 px-2.5 py-1 rounded-md border border-orange-900/30">🎉 Mega Combos</span>
+            <div class="flex flex-wrap gap-1.5 text-[10px]">
+                <span class="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded border border-orange-500/20">🔥 60% OFF</span>
+                <span class="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded border border-orange-500/20">⚡ Free Delivery</span>
+                <span class="bg-orange-500/10 text-orange-500 px-2 py-0.5 rounded border border-orange-500/20">🎉 Mega Combos</span>
             </div>
         </div>
 
         <!-- INSTAMART CARD -->
-        <div onclick="openInstamartLink()" class="blue-glow rounded-3xl p-4 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
-            <div class="flex justify-between items-start mb-3">
-                <span class="bg-sky-950/50 text-sky-400 text-[10px] px-3 py-1 rounded-full border border-sky-900/60 font-bold uppercase tracking-wider">
+        <div onclick="openInstamartLink()" class="blue-glow rounded-2xl p-3 relative overflow-hidden cursor-pointer active:scale-[0.98] transition-transform duration-100">
+            <div class="flex justify-between items-start mb-1.5">
+                <span class="bg-sky-500/10 text-sky-500 text-[9px] px-2.5 py-0.5 rounded-full border border-sky-500/30 font-bold uppercase tracking-wider">
                     <i class="fa-solid fa-shopping-cart mr-1"></i> INSTAMART
                 </span>
-                <button class="w-8 h-8 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center pointer-events-none">
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                <button class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-500 flex items-center justify-center pointer-events-none">
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </button>
             </div>
             
-            <div class="w-12 h-12 bg-sky-500 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg mb-3">
-                <i class="fa-solid fa-shopping-bag"></i>
+            <div class="flex items-center gap-2.5 mb-1.5">
+                <div class="w-9 h-9 bg-sky-500 rounded-xl flex items-center justify-center text-white text-base shadow-md shrink-0">
+                    <i class="fa-solid fa-shopping-bag"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold leading-tight">Swiggy Instamart</h3>
+                    <p class="text-[10px] leading-tight line-clamp-1" style="color: var(--text-sub);">Groceries, snacks & essentials delivered in minutes with instant delivery!</p>
+                </div>
             </div>
-
-            <h3 class="text-xl font-bold mb-1">Swiggy Instamart</h3>
-            <p class="text-xs text-gray-400 leading-relaxed mb-3">Groceries, snacks & essentials delivered in minutes. Stock up with instant delivery!</p>
             
-            <div class="flex flex-wrap gap-2 text-[11px]">
-                <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">🛒 10-Min Delivery</span>
-                <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">💰 Best Prices</span>
-                <span class="bg-sky-950/40 text-sky-400 px-2.5 py-1 rounded-md border border-sky-900/30">📦 Fresh Stock</span>
+            <div class="flex flex-wrap gap-1.5 text-[10px]">
+                <span class="bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded border border-sky-500/20">🛒 10-Min Delivery</span>
+                <span class="bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded border border-sky-500/20">💰 Best Prices</span>
+                <span class="bg-sky-500/10 text-sky-500 px-2 py-0.5 rounded border border-sky-500/20">📦 Fresh Stock</span>
             </div>
         </div>
     </main>
 
     <!-- FOOTER CREDITS -->
-    <footer class="text-center text-[10px] text-gray-500 tracking-wider uppercase pb-1">
-        DEVELOPED BY <span class="text-emerald-400 font-bold">GBX</span>
+    <footer class="text-center text-[10px] tracking-wider uppercase pb-1" style="color: var(--text-sub);">
+        DEVELOPED BY <span class="text-emerald-500 font-bold">GBX</span>
     </footer>
 
     <script>
-        // Initialize Telegram WebApp
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // 1. Automatic Time Greeting
         const hrs = new Date().getHours();
         let greet = "Hello";
         if (hrs < 12) greet = "Good morning";
@@ -195,7 +196,6 @@
         else greet = "Good evening";
         document.getElementById('greeting').innerText = greet;
 
-        // 2. Fetch Telegram User Data Automatically
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             document.getElementById('user-name').innerText = user.first_name;
@@ -208,7 +208,6 @@
             }
         }
 
-        // 3. Toggle Day/Night Mode
         function toggleTheme() {
             const body = document.body;
             const themeIcon = document.getElementById('theme-icon');
@@ -218,17 +217,14 @@
             if (body.classList.contains('light-mode')) {
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
-                themeIcon.parentElement.classList.remove('text-amber-400');
-                themeIcon.parentElement.classList.add('text-sky-300');
+                themeIcon.style.color = "#4f46e5";
             } else {
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
-                themeIcon.parentElement.classList.remove('text-sky-300');
-                themeIcon.parentElement.classList.add('text-amber-400');
+                themeIcon.style.color = "#f59e0b";
             }
         }
 
-        // 4. Custom Redirect Links
         function openSwiggyLink() {
             window.location.href = "https://www.swiggy.com/ipl-landing?x-channel=jiohotstar&hsClkId=f69664a025104e65b977cff483867cdf.f69664a025104e65b977cff483867cdf.SwiggyLimited_Swiggy_IPL26_BrandTab_campaignName_BrandTab.1775568784797";
         }
